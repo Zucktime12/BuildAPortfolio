@@ -1,0 +1,268 @@
+/* src/app.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global Styles */
+html {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply font-montserrat text-primary text-lg leading-relaxed tracking-wide text-center m-0 p-0 box-border;
+}
+
+[class*='-container'] {
+  @apply w-full max-w-4xl mx-auto px-6 box-border;
+}
+
+[class*='-heading'] {
+  @apply max-w-md w-auto mx-auto block max-h-[50px] pb-5;
+}
+
+.button {
+  @apply bg-white text-primary py-2.5 px-3.5 m-1 inline-block border-none text-lg no-underline rounded shadow-md font-montserrat;
+}
+
+.button:hover {
+  @apply bg-primary text-white;
+}
+
+/* Header */
+.header {
+  @apply fixed w-full bg-transparent z-10;
+}
+
+.header h2 {
+  @apply text-white text-2xl m-0;
+}
+
+.header-scroll-out {
+  @apply transition-all duration-400 ease-out;
+}
+
+.header-scroll {
+  @apply bg-white transition-all duration-800 ease-in;
+  height: 150px;
+}
+
+@media (min-width: 600px) {
+  .header-scroll {
+    @apply h-[85px];
+  }
+}
+
+.header-scroll h2,
+.header-scroll h1,
+.header-scroll .header-navigation a {
+  @apply text-primary;
+}
+
+.header-container {
+  @apply h-[85px] flex justify-between items-center;
+}
+
+@media (max-width: 600px) {
+  .header-container {
+    @apply flex-wrap;
+  }
+  .header-home,
+  .header-navigation {
+    @apply w-full;
+  }
+}
+
+.header h1 {
+  @apply text-2xl m-0 mb-1;
+}
+
+.header-navigation a {
+  @apply text-white no-underline px-3 py-2 inline-block;
+}
+
+.header-navigation a:hover {
+  @apply text-accent;
+}
+
+.header-home a {
+  @apply text-inherit no-underline;
+}
+
+.header-logo {
+  @apply max-h-[30px];
+}
+
+/* Hero */
+.hero {
+  @apply h-[50vh] flex flex-col justify-center items-center bg-[url('/brandonarya.jpg')] bg-cover bg-no-repeat flex-wrap overflow-hidden;
+  background-position-x: -35px;
+}
+
+.hero h2,
+.hero h1 {
+  @apply text-white;
+}
+
+.hero-image {
+  @apply w-full block text-left;
+}
+
+.hero-container h2 {
+  @apply m-0 p-0 pt-4 h-[37px] text-2xl text-center;
+}
+
+@media (min-width: 500px) {
+  .hero-container h2 {
+    @apply text-left;
+  }
+  .hero {
+    @apply h-screen bg-[center];
+  }
+  .hero-image {
+    @apply min-w-[600px];
+  }
+}
+
+/* About */
+.about {
+  @apply bg-gradient py-16 text-white;
+}
+
+.about-icons {
+  @apply flex items-center justify-center flex-wrap;
+}
+
+.about-icon {
+  @apply p-4 w-[8%];
+}
+
+@media (min-width: 600px) {
+  .flex {
+    @apply flex flex-1;
+  }
+  .flex-about {
+    @apply w-1/2 flex-1;
+  }
+}
+
+/* Projects */
+.projects {
+  @apply py-16;
+}
+
+.projects-heading {
+  @apply max-h-[65px];
+}
+
+.projects-list {
+  @apply flex flex-wrap p-0 list-none;
+}
+
+.project {
+  @apply w-[31.73%] m-[0.75%] relative shadow-md;
+  line-height: 0;
+}
+
+@media (max-width: 400px) {
+  .project {
+    @apply w-full my-3 mx-0;
+  }
+}
+
+@media (max-width: 600px) {
+  .project {
+    @apply w-[48%] m-[1%];
+  }
+}
+
+.project:hover .project-overlay {
+  @apply opacity-90;
+}
+
+.project:hover .project-tag {
+  @apply hidden;
+}
+
+.project-image {
+  @apply w-full box-border;
+}
+
+.project-overlay {
+  @apply absolute inset-0 bg-gradient z-0 text-white opacity-0 transition-all duration-400 ease-in flex justify-center items-center;
+}
+
+.project-overlay p {
+  @apply leading-relaxed text-sm m-0 p-2.5;
+}
+
+.project-tag {
+  @apply w-[55%] text-[10px] absolute h-0 bottom-10 right-5;
+}
+
+.project-tag p {
+  @apply leading-loose h-5 absolute bg-gradient text-white w-full rounded-md;
+}
+
+/* Modal */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[1000];
+}
+
+.modal-content {
+  @apply bg-white p-6 rounded-lg max-w-xl w-[90%];
+}
+
+.desc-body {
+  @apply px-4;
+}
+
+@media (max-width: 600px) {
+  .desc-body {
+    @apply px-8;
+  }
+}
+
+/* Contact */
+.contact {
+  @apply bg-gradient py-16 text-white;
+}
+
+.contact h2 {
+  @apply mb-0;
+}
+
+.contact-social a,
+.contact-text a {
+  @apply text-white;
+}
+
+.contact-text {
+  @apply pt-5;
+}
+
+.contact-social {
+  @apply flex justify-center pt-2.5;
+}
+
+.contact-social a {
+  @apply w-[50px] px-2;
+}
+
+.contact-social a img {
+  @apply w-[90%] mx-auto shadow-md rounded-xl;
+}
+
+.contact-ctas {
+  @apply flex justify-center;
+}
+
+/* Footer */
+.footer-link {
+  @apply no-underline text-primary cursor-pointer;
+}
+
+.footer-link p {
+  @apply flex justify-center items-center;
+}
