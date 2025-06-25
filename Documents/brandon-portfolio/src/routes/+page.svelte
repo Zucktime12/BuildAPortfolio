@@ -1,16 +1,4 @@
-<!-- <h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p> -->
-
-<script>
-//   import { gsap } from 'gsap';
-//   import { onMount } from 'svelte';
-
-//   onMount(() => {
-//     gsap.to('.box', { x: 100, duration: 1 });
-//     return () => gsap.killTweensOf('.box'); // Cleanup
-//   });
-
-
+<script lang="ts">
   import Hero from '$lib/components/hero.svelte';
   import About from '$lib/components/about.svelte';
   import Projects from '$lib/components/projects.svelte';
@@ -19,11 +7,17 @@
 </script>
 
 <main>
-  <Hero />
-  <About />
-  <Projects />
-  <Contact />
+  <section id="home">
+    <Hero />
+  </section>
+  <section id="about">
+    <About />
+  </section>
+  <section id="projects">
+    <Projects />
+  </section>
+  <section id="contact">
+    <Contact />
+  </section>
   <Footer />
 </main>
-
-<!-- <div class="box" style="width: 50px; height: 50px; background: blue;"></div> -->

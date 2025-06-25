@@ -1,37 +1,151 @@
-<!-- src/lib/components/projects.svelte -->
-<script>
+<script lang="ts">
     import { gsap } from 'gsap';
-    import { onMount } from 'svelte';
-    import Project from './project.svelte';
-    import myProjects from '$lib/data/myProjects';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import { writable } from 'svelte/store';
+    import { onMount, tick } from 'svelte';
+    import Modal from './modal.svelte';
+    import myProjects from '$lib/data/myProjects.ts';
   
-    let projects = {};
-    let selectedProject = null;
-    let isModalOpen = false;
+    gsap.registerPlugin(ScrollTrigger);
   
+    // Convert myProjects to array
+    const projects = Object.values(myProjects).map(project => ({
+      id: project.id,
+      title: project.name,
+      image: project.image,
+      desc: project.desc,
+      tags: project.tag.split(', '),
+      havLink: project.havLink,
+      link: project.link,
+      tag: project.tag,
+      buttontext: project.buttontext
+    }));
+  
+    // Log project images to verify imports
     onMount(() => {
-      projects = myProjects;
-      gsap.from('.project', { opacity: 0, y: 20, stagger: 0.2, duration: 0.5 });
+      console.log('Projects loaded:', projects.map(p => ({ id: p.id, title: p.title, image: p.image })));
+      const projectItems = document.querySelectorAll('.project-item');
+      console.log('Project items found:', projectItems.length);
+      if (projectItems.length === 0) {
+        console.warn('No project items found');
+        return;
+      }
+  
+      gsap.set(projectItems, { opacity: 0, y: 50 });
+      gsap.to(projectItems, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.25,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.projects-list',
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      });
+  
+      return () => {
+        console.log('Projects unmounted, cleaning up ScrollTrigger');
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      };
     });
   
-    function openModal(event) {
-      selectedProject = event.detail;
-      isModalOpen = true;
+    const selectedProject = writable<{
+      id: number;
+      title: string;
+      image: string;
+      desc: string;
+      tags: string[];
+      havLink: boolean;
+      link: string;
+      tag: string;
+      buttontext: string;
+    } | null>(null);
+  
+    $: console.log('projects.svelte reactive: selectedProject=', $selectedProject?.title);
+  
+    async function openModal(project) {
+      console.log('openModal called, project:', project.title, 'selectedProject before:', $selectedProject?.title);
+      $selectedProject = project;
+      console.log('Modal opened, selectedProject after:', $selectedProject?.title);
+      await tick();
+      const modal = document.querySelector('.modal-content');
+      if (modal) modal.focus();
     }
   
-    function closeModal() {
-      isModalOpen = false;
-      selectedProject = null;
+    async function closeModal() {
+      console.log('closeModal called, selectedProject before:', $selectedProject?.title);
+      $selectedProject = null;
+      await tick();
+      console.log('Modal closed, selectedProject after:', $selectedProject);
+    }
+  
+    function handleImageError(event: Event, projectTitle: string) {
+      console.error(`Failed to load image for ${projectTitle}: ${event.target.src}`);
+      event.target.src = '/fallback.png';
     }
   </script>
   
-  <section id="projects" class="projects bg-gradient-to-b from-gray-200 to-gray-300 py-12">
-    <div class="container mx-auto">
-      <h2 class="text-3xl font-bold text-center mb-8">My Work!</h2>
-      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {#each Object.keys(projects) as key}
-          <Project details={projects[key]} on:openModal={openModal} />
+  <section class="projects">
+    <div class="projects-container">
+      <h2 class="section-title">My Projects</h2>
+      <div class="projects-list">
+        {#each projects as project}
+          <div class="project-item">
+            <button
+              type="button"
+              class="project-button relative overflow-hidden rounded-lg shadow-lg w-full cursor-pointer focus:ring-2 ring-blue-600 transition-all duration-200 hover:bg-gray-100"
+              on:click={() => openModal(project)}
+              on:keydown={(e) => ['Enter', 'Space'].includes(e.key) && openModal(project)}
+              aria-label="View details for {project.title}"
+            >
+              <img
+                class="project-image"
+                src={project.image}
+                alt={project.title}
+                on:error={(e) => handleImageError(e, project.title)}
+              />
+              <div class="project-overlay">
+                <p class="truncate">{project.desc}</p>
+              </div>
+              <div class="project-tag">
+                <p>{project.tag}</p>
+              </div>
+            </button>
+          </div>
         {/each}
-      </ul>
+      </div>
     </div>
+  
+    <Modal isOpen={$selectedProject !== null} project={$selectedProject} on:close={closeModal} />
   </section>
+  
+  <style>
+    .section-title {
+      font-size: clamp(24px, 5vw, 36px);
+      margin-bottom: clamp(1rem, 2vw, 2rem);
+      text-align: left;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .projects-container {
+      @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-[1400px];
+    }
+    .projects-list {
+      @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+    }
+    .project-item {
+      @apply relative;
+    }
+    .project-image {
+      @apply w-full h-64 object-cover rounded-lg;
+    }
+    .project-overlay {
+      @apply absolute inset-0 bg-gradient-to-b from-black/80 to-transparent opacity-0 transition-all duration-200 flex items-center justify-center text-white text-base font-semibold;
+    }
+    .project-item:hover .project-overlay {
+      @apply opacity-100;
+    }
+    /* .project-tag styles moved to app.css */
+  </style>

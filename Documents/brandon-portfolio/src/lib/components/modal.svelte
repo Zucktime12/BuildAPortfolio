@@ -1,61 +1,68 @@
-<!-- src/lib/components/modal.svelte -->
-<script>
-    import { gsap } from 'gsap';
+<!-- modal.svelte -->
+<script lang="ts">
     import { onMount } from 'svelte';
-    import { fade } from 'svelte/transition';
+    export let isOpen: boolean;
+    export let project: { id: number; title: string; image: string; desc: string; tags: string[]; havLink: boolean; link: string; tag: string; buttontext: string } | null;
   
-    export let isOpen = false;
-    export let project = null;
-    export let onClose;
+    $: console.log('[Modal] Reactive: isOpen=', isOpen, 'project=', project?.title);
   
     onMount(() => {
-      if (isOpen) {
-        gsap.from('.modal', { scale: 0.8, opacity: 0, duration: 0.3 });
-      }
+      console.log('[Modal] Mounted: isOpen=', isOpen, 'project=', project?.title);
+      return () => {
+        console.log('[Modal] Unmounted');
+      };
     });
+  
+    function closeModal() {
+      console.log('[Modal] closeModal called: project=', project?.title);
+      isOpen = false;
+      dispatchEvent(new CustomEvent('close'));
+    }
   </script>
   
-  {#if isOpen}
-    <div
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      transition:fade
-      on:click={onClose}
-    >
-      <div
-        class="modal bg-white rounded-lg p-6 max-w-lg w-full"
-        on:click|stopPropagation
-      >
-        {#if project}
-          <div class="modal-header">
-            <h3 class="text-xl font-bold">{project.name}</h3>
+  {#if isOpen && project}
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">{project.title}</h2>
+          <button class="modal-close" on:click={closeModal} aria-label="Close modal">×</button>
+        </div>
+        <div class="modal-body">
+          <img class="modal-image" src={project.image} alt={project.title} on:error={(e) => e.target.src = '/fallback.png'} />
+          <p class="modal-desc">{project.desc}</p>
+          <div class="project-tags">
+            {#each project.tags as tag}
+              <span class="project-tag">{tag}</span>
+            {/each}
           </div>
-          <div class="modal-body">
-            <img
-              class="w-full h-48 object-cover mb-4"
-              src="/projects/{project.image}"
-              alt={project.name}
-            />
-            <p class="text-gray-700">{project.desc}</p>
-          </div>
-          <div class="modal-footer mt-4 flex justify-end gap-2">
-            {#if project.havLink}
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Click for {project.buttontext}
-              </a>
-            {/if}
-            <button
-              on:click={onClose}
-              class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Close
-            </button>
-          </div>
-        {/if}
+        </div>
+        <div class="modal-footer">
+          {#if project.havLink}
+            <a href={project.link} class="modal-button modal-button-primary" target="_blank" rel="noopener">{project.buttontext}</a>
+          {/if}
+          <button class="modal-button modal-button-secondary-svelte" on:click={closeModal}>Close</button>
+        </div>
       </div>
     </div>
+  {:else}
+    <!-- <div>[Modal] Not rendered: isOpen={isOpen}, project={project?.title}</div> -->
   {/if}
+  
+  <style>
+    .project-tag {
+      display: inline-block;
+      background: linear-gradient(45deg, #FFD700, #FF6F61, #1E90FF, #FFD700);
+      background-size: 400%;
+      color: #0a0c1b;
+      padding: 4px 8px;
+      margin: 4px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      animation: gradientRotate 3s linear infinite;
+    }
+    @keyframes gradientRotate {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 400% 50%; }
+    }
+  </style>
