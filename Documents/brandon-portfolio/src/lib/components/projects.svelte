@@ -18,10 +18,9 @@
       havLink: project.havLink,
       link: project.link,
       tag: project.tag,
-      buttontext: project.buttontext
+      buttontext: project.buttontext,
     }));
   
-    // Log project images to verify imports
     onMount(() => {
       console.log('Projects loaded:', projects.map(p => ({ id: p.id, title: p.title, image: p.image })));
       const projectItems = document.querySelectorAll('.project-item');
@@ -45,9 +44,37 @@
         },
       });
   
+      // Shine effect
+      projectItems.forEach(item => {
+        const shine = item.querySelector('.shine-effect');
+        if (shine) {
+          gsap.fromTo(
+            shine,
+            { x: '-100%', opacity: 0.5 },
+            {
+              x: '100%',
+              opacity: 0,
+              duration: 1.5,
+              ease: 'power2.out',
+              repeat: -1,
+              repeatDelay: 2,
+            }
+          );
+        }
+      });
+  
+      // Escape key handler
+      const handleKeydown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && $selectedProject !== null) {
+          closeModal();
+        }
+      };
+      window.addEventListener('keydown', handleKeydown);
+  
       return () => {
         console.log('Projects unmounted, cleaning up ScrollTrigger');
         ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        window.removeEventListener('keydown', handleKeydown);
       };
     });
   
@@ -107,11 +134,12 @@
                 on:error={(e) => handleImageError(e, project.title)}
               />
               <div class="project-overlay">
-                <p class="truncate">{project.desc}</p>
+                <p class="truncate">{project.title}</p>
               </div>
               <div class="project-tag">
                 <p>{project.tag}</p>
               </div>
+              <div class="shine-effect"></div>
             </button>
           </div>
         {/each}
@@ -142,10 +170,13 @@
       @apply w-full h-64 object-cover rounded-lg;
     }
     .project-overlay {
-      @apply absolute inset-0 bg-gradient-to-b from-black/80 to-transparent opacity-0 transition-all duration-200 flex items-center justify-center text-white text-base font-semibold;
+      @apply absolute inset-0 bg-gradient-to-b from-[rgba(75,0,130,0.75)] to-transparent opacity-0 transition-all duration-200 flex items-center justify-center text-white text-base font-semibold;
     }
     .project-item:hover .project-overlay {
       @apply opacity-100;
     }
-    /* .project-tag styles moved to app.css */
+    .shine-effect {
+      @apply absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0;
+      transform: skewX(-20deg);
+    }
   </style>

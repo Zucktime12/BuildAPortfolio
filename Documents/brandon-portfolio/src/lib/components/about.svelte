@@ -41,58 +41,93 @@
     onMount(async () => {
       console.log('About section mounted');
       await tick();
+      
+      // Icon animation
       const icons = document.querySelectorAll('.about-icon');
-      console.log(`Found ${icons.length} .about-icon elements`);
       if (icons.length === 0) {
         console.warn('No .about-icon elements found');
-        return;
+      } else {
+        console.log(`Found ${icons.length} .about-icon elements`);
+        gsap.fromTo(
+          icons,
+          { opacity: 0, rotation: -10, y: 20 },
+          {
+            opacity: 1,
+            rotation: 0,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: '.about',
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+            onStart: () => console.log('Icon animation started'),
+            onComplete: () => console.log('Icon animation completed'),
+          }
+        );
+        // Hover effect
+        icons.forEach(icon => {
+          icon.addEventListener('mouseenter', () => {
+            gsap.to(icon, { scale: 1.05, duration: 0.3, ease: 'power2.out' });
+          });
+          icon.addEventListener('mouseleave', () => {
+            gsap.to(icon, { scale: 1, duration: 0.3, ease: 'power2.out' });
+          });
+        });
       }
   
-      gsap.set(icons, { opacity: 0 });
-  
-      gsap.to(icons, {
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.2,
+      // Heading and paragraph animation
+      gsap.from('.about-heading', {
+        x: -50,
+        opacity: 0,
+        duration: 1,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: '.about',
           start: 'top 80%',
-          toggleActions: 'play none none none'
+          toggleActions: 'play none none none',
         },
-        onStart: () => console.log('About animation started'),
-        onComplete: () => console.log('About animation completed')
+      });
+      gsap.from('.about-text', {
+        x: 50,
+        opacity: 0,
+        duration: 1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.about',
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
       });
   
       return () => {
+        console.log('About unmounted, cleaning up ScrollTrigger');
         ScrollTrigger.getAll().forEach(trigger => trigger.kill());
       };
     });
-</script>
+  </script>
   
-<section class="about">
+  <section class="about">
     <div class="about-container">
       <h2 class="about-heading">About Me</h2>
-      <p class="text-center max-w-2xl mx-auto mb-8">
-        With 8+ years of experience as a web developer, I specialize in crafting <strong>custom websites</strong>, 
-        providing <strong>Shopify support</strong>, integrating <strong>APIs and CRMs</strong>, 
-        executing seamless <strong>site migrations</strong>, and optimizing for <strong>SEO</strong>. 
-        Let’s build a website that drives conversions and grows your business.
+      <p class="about-text text-center max-w-2xl mx-auto mb-8">
+        I’m Brandon Zucker, a Full Stack Developer with over 8 years of experience transforming ideas into high-performing digital solutions. Specializing in <strong>custom websites</strong>, <strong>Shopify e-commerce</strong>, <strong>API integrations</strong>, <strong>site migrations</strong>, and <strong>SEO optimization</strong>, I deliver results that drive conversions and elevate brands. From startups to established businesses, I’ve helped clients achieve success with tailored, scalable websites. Let’s collaborate to build a solution that grows your business and captivates your audience.
       </p>
       <div class="about-icons">
         {#each services as service}
-          <div class="about-icon" title={service.name}>
+          <div class="about-icon" title={service.name} role="button" tabindex="0" aria-label={`Learn more about ${service.name}`}>
             <i class="fas fa-{service.icon} text-4xl text-accent mb-4"></i>
             <h3 class="text-lg font-semibold text-white">{service.name}</h3>
             <p class="text-sm text-gray-300">{service.description}</p>
           </div>
         {/each}
       </div>
-      <a href="#contact" class="button mt-8">Get Started Today</a>
     </div>
-</section>
+  </section>
   
-<svelte:head>
+  <svelte:head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script type="application/ld+json">
       {
@@ -100,8 +135,8 @@
         "@type": "Service",
         "provider": {
           "@type": "Person",
-          "name": "Your Name",
-          "description": "Experienced web developer offering custom website development, Shopify support, web integrations, site migrations, and SEO optimization."
+          "name": "Brandon Zucker",
+          "description": "Experienced Full Stack Developer offering custom website development, Shopify support, web integrations, site migrations, and SEO optimization."
         },
         "offers": [
           {
@@ -132,12 +167,12 @@
         ]
       }
     </script>
-</svelte:head>
+  </svelte:head>
   
-<style>
+  <style>
     .about-icon {
-      position: relative;
-      overflow: hidden;
+      @apply p-4 w-[18%] text-center rounded-lg relative;
+      transition: transform 0.3s ease;
     }
     .about-icon::before {
       content: '';
@@ -155,9 +190,22 @@
     .about-icon:hover::before {
       opacity: 1;
     }
+    .about-icon:focus {
+      @apply outline-none ring-2 ring-accent;
+    }
     @keyframes border-glow {
       0% { border-image-source: linear-gradient(45deg, #FFD700, #FF4500, #FFD700); }
       50% { border-image-source: linear-gradient(45deg, #FF4500, #FFD700, #FF4500); }
       100% { border-image-source: linear-gradient(45deg, #FFD700, #FF4500, #FFD700); }
     }
-</style>
+    @media (max-width: 640px) {
+      .about-icon {
+        @apply w-[45%] my-4;
+      }
+    }
+    @media (max-width: 480px) {
+      .about-icon {
+        @apply w-full my-6;
+      }
+    }
+  </style>

@@ -1,68 +1,70 @@
-<!-- modal.svelte -->
 <script lang="ts">
-    import { onMount } from 'svelte';
     export let isOpen: boolean;
-    export let project: { id: number; title: string; image: string; desc: string; tags: string[]; havLink: boolean; link: string; tag: string; buttontext: string } | null;
+    export let project: {
+      id: number;
+      title: string;
+      image: string;
+      desc: string;
+      tags: string[];
+      havLink: boolean;
+      link: string;
+      tag: string;
+      buttontext: string;
+    } | null;
+    import { createEventDispatcher } from 'svelte';
   
-    $: console.log('[Modal] Reactive: isOpen=', isOpen, 'project=', project?.title);
+    const dispatch = createEventDispatcher();
   
-    onMount(() => {
-      console.log('[Modal] Mounted: isOpen=', isOpen, 'project=', project?.title);
-      return () => {
-        console.log('[Modal] Unmounted');
-      };
-    });
+    function close() {
+      dispatch('close');
+    }
   
-    function closeModal() {
-      console.log('[Modal] closeModal called: project=', project?.title);
-      isOpen = false;
-      dispatchEvent(new CustomEvent('close'));
+    function handleKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        close();
+      }
     }
   </script>
   
   {#if isOpen && project}
-    <div class="modal-overlay">
+    <div class="modal" role="dialog" aria-labelledby="modal-title" on:keydown={handleKeydown}>
       <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title">{project.title}</h2>
-          <button class="modal-close" on:click={closeModal} aria-label="Close modal">×</button>
+        <button class="close-button" on:click={close} aria-label="Close modal">×</button>
+        <h2 id="modal-title">{project.title}</h2>
+        <img src={project.image} alt={project.title} class="modal-image" />
+        <p>{project.desc}</p>
+        <div class="tags">
+          {#each project.tags as tag}
+            <span>{tag}</span>
+          {/each}
         </div>
-        <div class="modal-body">
-          <img class="modal-image" src={project.image} alt={project.title} on:error={(e) => e.target.src = '/fallback.png'} />
-          <p class="modal-desc">{project.desc}</p>
-          <div class="project-tags">
-            {#each project.tags as tag}
-              <span class="project-tag">{tag}</span>
-            {/each}
-          </div>
-        </div>
-        <div class="modal-footer">
-          {#if project.havLink}
-            <a href={project.link} class="modal-button modal-button-primary" target="_blank" rel="noopener">{project.buttontext}</a>
-          {/if}
-          <button class="modal-button modal-button-secondary-svelte" on:click={closeModal}>Close</button>
-        </div>
+        {#if project.havLink}
+          <a href={project.link} target="_blank" rel="noopener noreferrer">{project.buttontext}</a>
+        {/if}
       </div>
     </div>
-  {:else}
-    <!-- <div>[Modal] Not rendered: isOpen={isOpen}, project={project?.title}</div> -->
   {/if}
   
   <style>
-    .project-tag {
-      display: inline-block;
-      background: linear-gradient(45deg, #FFD700, #FF6F61, #1E90FF, #FFD700);
-      background-size: 400%;
-      color: #0a0c1b;
-      padding: 4px 8px;
-      margin: 4px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      animation: gradientRotate 3s linear infinite;
+    .modal {
+      @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
     }
-    @keyframes gradientRotate {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 400% 50%; }
+    .modal-content {
+      @apply bg-[rgba(8,8,28,0.9)] p-6 rounded-lg max-w-lg w-full mx-4;
+    }
+    .close-button {
+      @apply absolute top-2 right-2 text-white text-xl cursor-pointer bg-transparent border-none;
+    }
+    .modal-image {
+      @apply w-full h-auto rounded-md mt-4;
+    }
+    .tags {
+      @apply flex flex-wrap gap-2 mt-4;
+    }
+    .tags span {
+      @apply bg-gray-700 text-white px-2 py-1 rounded text-sm;
+    }
+    a {
+      @apply mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700;
     }
   </style>

@@ -1,12 +1,15 @@
-<!-- src/lib/components/footer.svelte -->
-<script>
+<script lang="ts">
     import { gsap } from 'gsap';
     import { onMount } from 'svelte';
   
     const year = new Date().getFullYear();
   
     onMount(() => {
+      console.log('Footer mounted, initializing animations');
       gsap.from('.footer', { opacity: 0, duration: 0.5 });
+      return () => {
+        console.log('Footer unmounted');
+      };
     });
   </script>
   

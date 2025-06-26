@@ -37,7 +37,7 @@ body {
 .header {
   @apply fixed top-0 left-0 w-full z-50 transition-all duration-200;
   min-height: 85px;
-  background: rgba(10, 11, 35, 0.5);
+  background: rgba(8, 8, 28, 0.7);
 }
 .header-container {
   @apply h-[85px] flex items-center justify-between max-w-4xl mx-auto px-4 sm:px-6;
@@ -49,13 +49,18 @@ body {
   @apply flex items-center;
 }
 .header-navigation a.nav-link {
-  @apply text-white text-[16px] font-semibold px-3 py-2 no-underline hover:text-[#ff6F61] transition-colors duration-150;
+  @apply text-white text-[16px] font-semibold px-3 py-2 no-underline transition-colors duration-150;
+}
+.header.header-scrolled {
+  background: rgba(8, 8, 28, 0.9);
 }
 .header.header-scrolled .header-home a,
 .header.header-scrolled .header-navigation a.nav-link {
   @apply text-white opacity-100;
 }
-/* Mobile adjustments */
+.title-char {
+  display: inline-block;
+}
 @media (max-width: 767px) {
   .header-container {
     @apply flex-col items-start;
@@ -114,13 +119,10 @@ body {
   @apply flex items-center justify-center gap-4 flex-wrap;
 }
 .about-icon {
-  @apply p-4 w-[18%] text-center rounded-lg;
+  @apply p-4 w-[18%] text-center rounded-lg relative;
 }
 .about-icon a {
   @apply no-underline text-white;
-}
-.about-icon:hover i {
-  @apply scale-125 text-[#ff5722];
 }
 @media (max-width: 640px) {
   .about-icon {
@@ -198,13 +200,13 @@ body {
 .project-tags {
   @apply flex flex-wrap gap-3 justify-center my-4;
 }
-.project-tag {
+.modal-project-tag {
   @apply inline-block text-white px-3 py-1 rounded-full text-[13px] font-semibold;
   background: linear-gradient(45deg, #4B0082, #1E90FF, #FF4500, #4B0082);
   background-size: 400%;
   animation: gradientRotate 5s linear infinite;
 }
-.project-tag:hover {
+.modal-project-tag:hover {
   animation-play-state: paused;
 }
 .modal-footer {
@@ -225,35 +227,26 @@ body {
   @apply bg-transparent py-20 text-white;
 }
 .contact h2 {
-  @apply mb-0;
+  @apply mb-0 text-3xl font-bold;
 }
-.contact-social a,
 .contact-text a {
-  @apply text-white no-underline;
+  @apply text-blue-500 hover:underline;
 }
 .contact-text {
   @apply pt-10;
 }
 .contact-social {
-  @apply flex justify-center pt-5;
+  @apply flex justify-center pt-5 gap-4;
 }
 .contact-social a {
-  @apply w-[50px] px-3;
-}
-.contact-social a img {
-  @apply w-full mx-auto rounded-full shadow-lg;
+  @apply text-3xl text-white hover:text-[#FF6F61];
 }
 .contact-ctas {
   @apply flex justify-center gap-4;
 }
-
-/* Footer */
-.footer {
-  @apply py-4 bg-gray-900 text-gray-400;
+.resume-text {
+  @apply text-[#FF6F61] text-lg;
 }
-.footer-link {
-  @apply no-underline text-gray-400 hover:text-white cursor-pointer;
-}
-.footer-link p {
-  @apply flex justify-center items-center;
+.resume-char {
+  display: inline-block;
 }
