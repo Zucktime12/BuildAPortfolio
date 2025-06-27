@@ -29,12 +29,12 @@
         </div>
         <div class="modal-body">
           <img class="modal-image" src={project.image} alt={project.title} on:error={(e) => e.target.src = '/fallback.png'} />
-          <p class="modal-desc">{project.desc}</p>
           <div class="project-tags">
             {#each project.tags as tag}
-              <span class="project-tag">{tag}</span>
+              <span class="project-tag-inner">{tag}</span>
             {/each}
           </div>
+          <p class="modal-desc">{project.desc}</p>
         </div>
         <div class="modal-footer">
           {#if project.havLink}
@@ -49,7 +49,7 @@
   {/if}
   
   <style>
-    .project-tag {
+    .project-tag-inner {
       display: inline-block;
       background: linear-gradient(45deg, #FFD700, #FF6F61, #1E90FF, #FFD700);
       background-size: 400%;

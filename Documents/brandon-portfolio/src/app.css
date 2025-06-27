@@ -25,7 +25,7 @@ body {
 
 /* Starfield */
 .starfield {
-  @apply fixed top-0 left-0 w-full h-full z-[-1];
+  @apply fixed top-0 left-0 w-full h-full z-[-1] bg-[rgb(8,8,28)];
 }
 
 /* Content */
@@ -37,7 +37,7 @@ body {
 .header {
   @apply fixed top-0 left-0 w-full z-50 transition-all duration-200;
   min-height: 85px;
-  background: rgba(10, 11, 35, 0.5);
+  background: rgba(10, 11, 35, 0.7);
 }
 .header-container {
   @apply h-[85px] flex items-center justify-between max-w-4xl mx-auto px-4 sm:px-6;
@@ -46,16 +46,31 @@ body {
   @apply text-white text-[24px] font-bold no-underline;
 }
 .header-navigation {
-  @apply flex items-center;
+  @apply flex items-center gap-2;
 }
 .header-navigation a.nav-link {
-  @apply text-white text-[16px] font-semibold px-3 py-2 no-underline hover:text-[#ff6F61] transition-colors duration-150;
+  @apply text-white text-[16px] font-semibold px-3 py-2 no-underline relative z-10;
+  transition: color 0.3s, transform 0.3s;
 }
-.header.header-scrolled .header-home a,
-.header.header-scrolled .header-navigation a.nav-link {
-  @apply text-white opacity-100;
+.header-navigation a.nav-link:hover {
+  @apply text-[#800080] scale-110;
 }
-/* Mobile adjustments */
+.header-navigation a.nav-link:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, #800080, #1E90FF);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+.header-navigation a.nav-link:hover:after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
 @media (max-width: 767px) {
   .header-container {
     @apply flex-col items-start;
@@ -65,7 +80,7 @@ body {
     @apply w-full;
   }
   .header-navigation {
-    @apply flex-col;
+    @apply flex-col gap-1;
   }
   .header-navigation a.nav-link {
     @apply py-1;
@@ -76,17 +91,18 @@ body {
     @apply flex-row;
   }
   .header-navigation {
-    @apply flex-row;
+    @apply flex-row gap-2;
   }
 }
 
 /* Hero */
 .hero {
-  @apply h-[50vh] flex flex-col items-center bg-transparent z-10;
+  @apply h-[50vh] flex flex-col items-center bg-transparent z-20;
 }
 .hero h2,
 .hero h1 {
-  @apply text-white;
+  @apply text-white font-bold;
+  font-size: clamp(32px, 6vw, 48px);
 }
 .hero-image {
   @apply w-full block text-left;
@@ -99,7 +115,7 @@ body {
     @apply text-left;
   }
   .hero {
-    @apply h-screen bg-transparent z-10;
+    @apply h-screen bg-transparent z-20;
   }
   .hero-image {
     @apply min-w-[500px];
@@ -143,69 +159,89 @@ body {
 .projects-list {
   @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
 }
+.section-title {
+  @apply text-white font-bold text-center;
+  font-size: clamp(24px, 5vw, 36px);
+}
 .project-item {
-  @apply relative;
+  @apply relative z-10;
+}
+.project-button {
+  @apply relative rounded-lg shadow-lg w-full h-64 cursor-pointer focus:ring-2 ring-blue-600 transition-all duration-200;
 }
 .project-image {
-  @apply w-full h-[400px] object-cover rounded-lg;
+  @apply w-full h-64 object-cover rounded-lg;
+  image-rendering: crisp-edges;
 }
 .project-overlay {
-  @apply absolute inset-0 bg-gradient-to-b from-black/80 to-transparent opacity-0 transition-all duration-200 flex items-center justify-center text-white text-base font-semibold;
+  @apply absolute inset-0 bg-[rgba(8,8,28,0.8)] opacity-0 transition-opacity duration-300 flex items-center justify-center text-white text-base font-semibold rounded-lg;
 }
 .project-item:hover .project-overlay {
   @apply opacity-100;
 }
 .project-tag {
-  @apply absolute bottom-4 right-4 text-white text-[11px] font-semibold px-3 py-1 rounded-full;
-  display: inline-block;
-  background: linear-gradient(45deg, #4B0082, #1E90FF, #FF4500, #4B0082);
+  @apply absolute bottom-4 right-4 text-white text-[11px] font-semibold px-3 py-1 rounded-full z-20;
+  background: linear-gradient(45deg, #A100FF, #FF4500, #A100FF);
   background-size: 400%;
-  animation: gradientRotate 5s linear infinite;
+  animation: gradientRotate 8s linear infinite;
+}
+.project-tag-inner {
+    @apply inline-block bottom-4 right-4 text-white text-[11px] font-semibold px-3 py-1 rounded-full z-20;
+    background: linear-gradient(45deg, #A100FF, #FF4500, #A100FF);
+    background-size: 400%;
+    animation: gradientRotate 8s linear infinite;
+}
+.shine-effect {
+  @apply absolute inset-[-1px] rounded-[15px] z-[-1];
+  border: 1px solid transparent;
+  border-image: linear-gradient(to right, #A100FF, #FF4500, #A100FF) 1;
+  box-shadow: 0 0 8px rgba(161, 0, 255, 0.8), 0 0 12px rgba(255, 69, 0, 0.8);
+  animation: borderRotate 3s linear infinite;
+  opacity: 0.8;
+}
+.project-item:hover .shine-effect {
+  @apply opacity-100;
+  box-shadow: 0 0 12px rgba(161, 0, 255, 1), 0 0 16px rgba(255, 69, 0, 1);
+}
+@keyframes borderRotate {
+  0% { border-image-source: linear-gradient(0deg, #A100FF, #FF4500, #A100FF); }
+  100% { border-image-source: linear-gradient(360deg, #A100FF, #FF4500, #A100FF); }
 }
 @keyframes gradientRotate {
   0% { background-position: 0% 50%; }
   100% { background-position: 400% 50%; }
 }
-.project-tag:hover {
+.project-tag:hover, .project-tag-inner:hover {
   animation-play-state: paused;
 }
 
 /* Modal */
 .modal-overlay {
-  @apply fixed inset-0 bg-black bg-opacity-70 z-[1000] flex items-start justify-center pt-[100px] min-h-screen;
+  @apply fixed inset-0 bg-black/70 z-[1000] flex items-start justify-center pt-[100px] min-h-screen;
 }
 .modal-content {
-  @apply bg-white rounded-lg p-8 w-[70vw] max-h-[80vh] overflow-y-auto shadow-2xl relative z-[1001];
+  @apply bg-[rgba(8,8,28,0.9)] text-white rounded-lg p-8 w-[70vw] max-h-[80vh] overflow-y-auto shadow-2xl relative z-[1001];
 }
 .modal-header {
   @apply flex justify-between items-center mb-6;
 }
 .modal-title {
-  @apply text-[28px] font-semibold text-gray-900;
+  @apply text-[28px] font-semibold;
 }
 .modal-close {
-  @apply text-gray-600 text-3xl font-bold hover:text-gray-800 cursor-pointer bg-transparent border-none;
+  @apply text-white text-3xl font-bold hover:text-gray-300 cursor-pointer bg-transparent border-none;
 }
 .modal-body {
   @apply mb-8;
 }
 .modal-image {
-  @apply w-full h-[400px] object-cover rounded-lg mb-6;
+  @apply w-full max-h-[60vh] object-contain rounded-lg mb-6;
 }
 .modal-desc {
-  @apply text-gray-600 text-[16px] leading-relaxed;
+  @apply text-gray-300 text-[16px] leading-relaxed;
 }
 .project-tags {
   @apply flex flex-wrap gap-3 justify-center my-4;
-}
-.project-tag {
-  @apply inline-block text-white px-3 py-1 rounded-full text-[13px] font-semibold;
-  background: linear-gradient(45deg, #4B0082, #1E90FF, #FF4500, #4B0082);
-  background-size: 400%;
-  animation: gradientRotate 5s linear infinite;
-}
-.project-tag:hover {
-  animation-play-state: paused;
 }
 .modal-footer {
   @apply flex justify-end gap-4;

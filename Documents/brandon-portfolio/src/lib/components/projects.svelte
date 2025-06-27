@@ -18,10 +18,9 @@
       havLink: project.havLink,
       link: project.link,
       tag: project.tag,
-      buttontext: project.buttontext
+      buttontext: project.buttontext,
     }));
   
-    // Log project images to verify imports
     onMount(() => {
       console.log('Projects loaded:', projects.map(p => ({ id: p.id, title: p.title, image: p.image })));
       const projectItems = document.querySelectorAll('.project-item');
@@ -45,9 +44,18 @@
         },
       });
   
+      // Escape key handler
+      const handleKeydown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && $selectedProject !== null) {
+          closeModal();
+        }
+      };
+      window.addEventListener('keydown', handleKeydown);
+  
       return () => {
         console.log('Projects unmounted, cleaning up ScrollTrigger');
         ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        window.removeEventListener('keydown', handleKeydown);
       };
     });
   
@@ -85,67 +93,71 @@
       console.error(`Failed to load image for ${projectTitle}: ${event.target.src}`);
       event.target.src = '/fallback.png';
     }
-  </script>
-  
-  <section class="projects">
-    <div class="projects-container">
-      <h2 class="section-title">My Projects</h2>
-      <div class="projects-list">
-        {#each projects as project}
-          <div class="project-item">
-            <button
-              type="button"
-              class="project-button relative overflow-hidden rounded-lg shadow-lg w-full cursor-pointer focus:ring-2 ring-blue-600 transition-all duration-200 hover:bg-gray-100"
-              on:click={() => openModal(project)}
-              on:keydown={(e) => ['Enter', 'Space'].includes(e.key) && openModal(project)}
-              aria-label="View details for {project.title}"
-            >
-              <img
-                class="project-image"
-                src={project.image}
-                alt={project.title}
-                on:error={(e) => handleImageError(e, project.title)}
-              />
-              <div class="project-overlay">
-                <p class="truncate">{project.desc}</p>
-              </div>
-              <div class="project-tag">
-                <p>{project.tag}</p>
-              </div>
-            </button>
-          </div>
-        {/each}
-      </div>
+</script>
+
+<section class="projects">
+  <div class="projects-container">
+    <h2 class="section-title">My Projects</h2>
+    <div class="projects-list">
+      {#each projects as project}
+        <div class="project-item">
+          <button
+            type="button"
+            class="project-button relative rounded-lg shadow-lg w-full h-64 cursor-pointer focus:ring-2 ring-blue-600 transition-all duration-200"
+            on:click={() => openModal(project)}
+            on:keydown={(e) => ['Enter', 'Space'].includes(e.key) && openModal(project)}
+            aria-label="View details for {project.title}"
+          >
+            <img
+              class="project-image"
+              src={project.image}
+              alt={project.title}
+              loading="lazy"
+              on:error={(e) => handleImageError(e, project.title)}
+            />
+            <div class="project-overlay">
+              <p class="truncate">{project.title}</p>
+            </div>
+            <div class="project-tag">
+              <p>{project.tag}</p>
+            </div>
+            <div class="shine-effect"></div>
+          </button>
+        </div>
+      {/each}
     </div>
-  
-    <Modal isOpen={$selectedProject !== null} project={$selectedProject} on:close={closeModal} />
-  </section>
-  
-  <style>
-    .section-title {
-      font-size: clamp(24px, 5vw, 36px);
-      margin-bottom: clamp(1rem, 2vw, 2rem);
-      text-align: left;
-      font-weight: 700;
-      color: #ffffff;
-    }
-    .projects-container {
-      @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-[1400px];
-    }
-    .projects-list {
-      @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
-    }
-    .project-item {
-      @apply relative;
-    }
-    .project-image {
-      @apply w-full h-64 object-cover rounded-lg;
-    }
-    .project-overlay {
-      @apply absolute inset-0 bg-gradient-to-b from-black/80 to-transparent opacity-0 transition-all duration-200 flex items-center justify-center text-white text-base font-semibold;
-    }
-    .project-item:hover .project-overlay {
-      @apply opacity-100;
-    }
-    /* .project-tag styles moved to app.css */
-  </style>
+  </div>
+
+  <Modal isOpen={$selectedProject !== null} project={$selectedProject} on:close={closeModal} />
+</section>
+
+<style>
+  .section-title {
+    font-size: clamp(24px, 5vw, 36px);
+    margin-bottom: clamp(1rem, 2vw, 2rem);
+    text-align: center;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  .projects-container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-[1400px];
+  }
+  .projects-list {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+  }
+  .project-item {
+    @apply relative z-10;
+  }
+  .project-image {
+    @apply w-full h-64 object-cover rounded-lg;
+  }
+  .project-overlay {
+    @apply absolute inset-0 bg-[rgba(8,8,28,0.8)] opacity-0 transition-opacity duration-300 flex items-center justify-center text-white text-base font-semibold rounded-lg;
+  }
+  .project-item:hover .project-overlay {
+    @apply opacity-100;
+  }
+  .shine-effect {
+    @apply absolute inset-[-1px] rounded-[15px] z-[-1];
+  }
+</style>
