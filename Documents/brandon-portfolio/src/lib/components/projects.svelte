@@ -132,32 +132,5 @@
 </section>
 
 <style>
-  .section-title {
-    font-size: clamp(24px, 5vw, 36px);
-    margin-bottom: clamp(1rem, 2vw, 2rem);
-    text-align: center;
-    font-weight: 700;
-    color: #ffffff;
-  }
-  .projects-container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-[1400px];
-  }
-  .projects-list {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
-  }
-  .project-item {
-    @apply relative z-10;
-  }
-  .project-image {
-    @apply w-full h-64 object-cover rounded-lg;
-  }
-  .project-overlay {
-    @apply absolute inset-0 bg-[rgba(8,8,28,0.8)] opacity-0 transition-opacity duration-300 flex items-center justify-center text-white text-base font-semibold rounded-lg;
-  }
-  .project-item:hover .project-overlay {
-    @apply opacity-100;
-  }
-  .shine-effect {
-    @apply absolute inset-[-1px] rounded-[15px] z-[-1];
-  }
+  
 </style>

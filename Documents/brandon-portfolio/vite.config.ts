@@ -11,22 +11,25 @@ export default defineConfig({
       includeAssets: [
         'favicon.ico',
         'apple-touch-icon.png',
-        'lib/assets/*.jpg',
-        'lib/assets/icons/*.svg',
-        'lib/assets/projects/*.png',
-        'lib/assets/projects/*.jpg'
+        // Update these paths to reflect their actual location in src/
+        // Vite will hash them and put them in a build directory,
+        // so you reference them by their source path here for precaching.
+        'src/lib/assets/*.jpg',
+        'src/lib/assets/icons/*.svg', // <-- IMPORTANT: Update this line
+        'src/lib/assets/projects/*.png',
+        'src/lib/assets/projects/*.jpg'
       ],
       manifest: {
         name: 'Brandon Portfolio',
         short_name: 'Portfolio',
         icons: [
           {
-            src: '/android-chrome-192x192.png',
+            src: '/android-chrome-192x192.png', // Assuming these are in `static`
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/android-chrome-512x512.png',
+            src: '/android-chrome-512x512.png', // Assuming these are in `static`
             sizes: '512x512',
             type: 'image/png'
           }
@@ -43,5 +46,6 @@ export default defineConfig({
       '$lib': path.resolve('./src/lib')
     }
   },
+  // This is good and tells Vite to treat SVGs as assets when imported.
   assetsInclude: ['**/*.jpg', '**/*.png', '**/*.svg']
 });

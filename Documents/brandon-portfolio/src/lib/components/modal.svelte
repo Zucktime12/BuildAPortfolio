@@ -53,13 +53,13 @@
       display: inline-block;
       background: linear-gradient(45deg, #FFD700, #FF6F61, #1E90FF, #FFD700);
       background-size: 400%;
-      color: #0a0c1b;
+      /* color: #0a0c1b; */
       padding: 4px 8px;
       margin: 4px;
-      border-radius: 12px;
+      /* border-radius: 12px; */
       font-size: 12px;
       font-weight: 600;
-      animation: gradientRotate 3s linear infinite;
+      animation: gradientRotate 7s linear infinite;
     }
     @keyframes gradientRotate {
       0% { background-position: 0% 50%; }
