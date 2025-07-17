@@ -97,7 +97,7 @@
 
 <section class="projects">
   <div class="projects-container">
-    <h2 class="section-title">My Projects</h2>
+    <h4 class="section-title">My Projects</h4>
     <div class="projects-list">
       {#each projects as project}
         <div class="project-item">

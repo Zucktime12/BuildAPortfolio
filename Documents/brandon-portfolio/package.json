@@ -5,8 +5,9 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
+    	"build": "vite build",
+    	"preview": "vite preview",
+    	"visualize": "vite build -- --analyze",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -16,6 +17,7 @@
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@sveltejs/adapter-auto": "^3.2.5",
+		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/kit": "^2.6.3",
 		"@sveltejs/vite-plugin-svelte": "^3.1.2",
 		"autoprefixer": "^10.4.20",
@@ -30,6 +32,7 @@
 		"typescript": "^5.6.2",
 		"typescript-eslint": "^8.20.0",
 		"vite": "^5.4.8",
+		"vite-bundle-visualizer": "^1.2.1",
 		"vite-plugin-devtools-json": "^0.2.0",
 		"vite-plugin-pwa": "^0.20.5"
 	},

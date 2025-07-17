@@ -8,13 +8,13 @@
   const socialLinks = [
     {
       name: 'LinkedIn',
-      url: 'https://linkedin.com/in/your-profile',
+      url: 'https://linkedin.com/in/brandon-zucker',
       icon: 'linkedin',
       bgColor: '#0A66C2',
     },
     {
       name: 'GitHub',
-      url: 'https://github.com/your-profile',
+      url: 'https://github.com/Zucktime12',
       icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-icon"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.607.069-.607 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.087.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.253-.447-1.27.098-2.646 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.376.202 2.394.1 2.646.641.698 1.028 1.591 1.028 2.682 0 3.841-2.337 4.687-4.565 4.936.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.482C19.137 20.164 22 16.42 22 12c0-5.523-4.477-10-10-10z"/></svg>',
       bgColor: '#800080',
     },
@@ -84,12 +84,12 @@
       <span class="inline-block char" style={char === ' ' ? 'width: 10px;' : ''}>{char}</span>
       {/each}
     </h5>
-    <p class="contact-text text-lg text-white max-w-md mx-auto">
+    <p class="contact-text pb-8 text-lg text-white max-w-md mx-auto">
       Ready to bring your project to life? Reach out to discuss your vision or connect with me on social media.
     </p>
     <div class="contact-buttons flex justify-center gap-4 mb-6">
-      <a href="mailto:your.email@example.com" class="contact-button px-6 py-3 text-white text-base font-semibold rounded-full bg-[var(--accent)] hover:scale-105 transition-transform duration-300">Email Me</a>
-      <a href="tel:+1234567890" class="contact-button px-6 py-3 text-white text-base font-semibold rounded-full bg-[var(--accent)] hover:scale-105 transition-transform duration-300">Call Me</a>
+      <a href="mailto:bwzuck12@gmail.com" class="contact-button px-6 py-3 text-white text-base font-semibold rounded-full bg-[var(--accent)] hover:scale-105 transition-transform duration-300">Email Me</a>
+      <a href="tel:+6365411059" class="contact-button px-6 py-3 text-white text-base font-semibold rounded-full bg-[var(--accent)] hover:scale-105 transition-transform duration-300">Call Me</a>
     </div>
     <div class="contact-social flex justify-center gap-6">
       {#each socialLinks as link}
